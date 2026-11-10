@@ -123,19 +123,32 @@
     });
   }
 
-  // User gesture unlock for music (only on actual user tap/click to protect screen readers)
+  // User gesture unlock for music (covers clicks, mobile taps, scrolling, and keyboard)
   function startAudioOnGesture(e) {
     if (isPlaying || !bgMusic) return;
-    if (e && e.target && (e.target.closest('#headerMusicBtn') || e.target.id === 'headerMusicBtn')) return;
+    
+    // Ignore the music button itself so we don't conflict with its toggle logic
+    if (e && e.target && e.target.closest && (e.target.closest('#headerMusicBtn') || e.target.id === 'headerMusicBtn')) return;
+    
     bgMusic.play().then(function() {
       isPlaying = true;
       updateAudioUI(true);
-      window.removeEventListener('click', startAudioOnGesture);
-    }).catch(function() {
       
+      // Once the music unlocks, remove all these listeners so it doesn't slow down the site
+      window.removeEventListener('click', startAudioOnGesture);
+      window.removeEventListener('touchstart', startAudioOnGesture);
+      window.removeEventListener('scroll', startAudioOnGesture);
+      window.removeEventListener('keydown', startAudioOnGesture);
+    }).catch(function() {
+      // Browser hasn't allowed autoplay yet; keep waiting for the next gesture
     });
   }
+  
+  // Bind all interaction types
   window.addEventListener('click', startAudioOnGesture);
+  window.addEventListener('touchstart', startAudioOnGesture, { passive: true });
+  window.addEventListener('scroll', startAudioOnGesture, { passive: true });
+  window.addEventListener('keydown', startAudioOnGesture, { passive: true });
 
   // pause music when stiwch tab
   var wasPlayingBeforeHide = false;
