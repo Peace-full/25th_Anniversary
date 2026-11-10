@@ -137,6 +137,26 @@
   }
   window.addEventListener('click', startAudioOnGesture);
 
+  // pause music when stiwch tab
+  var wasPlayingBeforeHide = false;
+  
+  document.addEventListener('visibilitychange', function() {
+    if (!bgMusic) return;
+    
+    if (document.hidden) {
+      // User switched to another tab
+      wasPlayingBeforeHide = isPlaying;
+      if (isPlaying) {
+        bgMusic.pause(); // Triggers the existing pause event listener to update the UI
+      }
+    } else {
+      // User came back to the tab
+      if (wasPlayingBeforeHide) {
+        bgMusic.play().catch(function() {});
+      }
+    }
+  });
+
   /* =========================================================================
      3. ULTRA-FAST SCROLL PROGRESS & ZERO-LAG TIMELINE LIGHT BEAM
      ========================================================================= */
