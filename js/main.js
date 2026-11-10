@@ -132,7 +132,7 @@
       updateAudioUI(true);
       window.removeEventListener('click', startAudioOnGesture);
     }).catch(function() {
-      // Autoplay policy not yet satisfied; keep listener primed for next user gesture
+      
     });
   }
   window.addEventListener('click', startAudioOnGesture);
