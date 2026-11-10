@@ -1,3 +1,9 @@
+body.curtain-locked {
+  overflow: hidden !important;
+  height: 100vh !important;
+  max-height: 100vh !important;
+  touch-action: none !important;
+}
 /* ==========================================================================
    Mom & Dad's 25th Wedding Anniversary - Bespoke Editorial Luxury Style
    Ultra-optimized for 60fps+ silky-smooth scrolling on all devices.
@@ -868,6 +874,13 @@ button {
   background: rgba(197, 160, 89, 0.16);
   transform: translateX(-50%);
   z-index: 1;
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(197, 160, 89, 0.16) 5%, 
+    rgba(197, 160, 89, 0.16) 95%, 
+    transparent 100%
+  );
 }
 
 /* Scroll-Driven Radiant Progress Beam */
@@ -1720,7 +1733,10 @@ button {
   font-weight: 800;
   margin-top: 0.5rem;
   line-height: 1.1;
-  text-shadow: 0 10px 30px rgba(0,0,0,0.5);
+  color: var(--text-light);   
+  text-shadow: 
+    0 0 4px rgba(197, 160, 89, 0.8),
+    0 0 12px rgba(197, 160, 89, 0.4); 
 }
 .curtain-subtitle {
   font-family: var(--sans);
@@ -1755,4 +1771,19 @@ button {
   transform: translateY(-3px) scale(1.02);
   box-shadow: 0 16px 36px rgba(197, 160, 89, 0.4);
   background: linear-gradient(135deg, #FFDE7A, var(--gold));
+}
+
+/* Gentle breathing glow for the entrance button */
+@keyframes breathingGlow {
+  0%, 100% { box-shadow: 0 8px 24px rgba(197, 160, 89, 0.25); }
+  50% { box-shadow: 0 8px 45px rgba(197, 160, 89, 0.55); }
+}
+
+.tribute-curtain .btn-enter-curtain {
+  animation: breathingGlow 3s ease-in-out infinite;
+}
+
+/* Pause the breathing when they actually hover over it */
+.curtain-click-layer:hover ~ .curtain-panel .btn-enter-curtain {
+  animation: none; 
 }

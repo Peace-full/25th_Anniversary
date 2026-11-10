@@ -150,20 +150,33 @@
   window.addEventListener('scroll', startAudioOnGesture, { passive: true });
   window.addEventListener('keydown', startAudioOnGesture, { passive: true });
 
-  // Opening Invitation Curtain & Audio Unlock
+  // 1. Force top scroll BEFORE the page even finishes refreshing
+  window.onbeforeunload = function () {
+    window.scrollTo(0, 0);
+  };
+  if ('scrollRestoration' in history) {
+    history.scrollRestoration = 'manual';
+  }
+
+  // 2. Opening Tribute Curtain & Audio Unlock
   var curtain = document.getElementById('tributeCurtain');
   var btnEnter = document.getElementById('btnEnterTribute');
 
   if (btnEnter && curtain) {
+    // Extra safety: Force to top right now as well
+    setTimeout(function() { window.scrollTo(0, 0); }, 50);
+
     btnEnter.addEventListener('click', function(e) {
-      // 1. Immediately attempt to unlock the audio track using this click gesture
+      // Unlock the audio track
       startAudioOnGesture(e);
       
-      // 2. Trigger the CSS slide animation
+      // Trigger the CSS slide animation
       curtain.classList.add('opened');
       
-      // 3. Remove the curtain from the DOM completely after the 1.2s animation finishes 
-      // so it doesn't block clicks or slow down scrolling
+      // Unlock the page scrolling!
+      document.body.classList.remove('curtain-locked');
+      
+      // Remove the curtain from the DOM after animation finishes
       setTimeout(function() {
         curtain.style.display = 'none';
       }, 1250);
