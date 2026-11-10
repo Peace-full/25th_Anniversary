@@ -194,6 +194,8 @@ button {
   transform: scaleX(0);
   z-index: 10000;
   pointer-events: none;
+  transition: transform 0.08s linear;
+  will-change: transform;
 }
 
 /* Lightweight static ambient gradient (No heavy filters or repainting) */
@@ -259,14 +261,6 @@ button {
   font-size: 0.98rem;
   letter-spacing: 0.06em;
   color: var(--gold-light);
-}
-.brand-subtitle {
-  font-family: var(--sans);
-  font-size: 0.72rem;
-  font-weight: 700;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: var(--gold);
 }
 
 .nav-links {
@@ -374,9 +368,6 @@ button {
     max-width: 380px;
     justify-content: space-between;
   }
-  .brand-subtitle {
-    display: none;
-  }
   .btn-pill-compact {
     padding: 0.4rem 0.7rem;
     font-size: 0.7rem;
@@ -447,7 +438,7 @@ button {
 }
 .eyebrow-symbol {
   color: var(--gold);
-  font-size: 0.85em;
+  font-size: 1.20em;
   display: inline-block;
   line-height: 1;
 }
@@ -893,6 +884,7 @@ button {
   pointer-events: none;
   opacity: 0;
   transition: opacity 0.25s ease;
+  will-change: height;
 }
 .timeline-progress-beam.active {
   opacity: 1;
@@ -939,10 +931,10 @@ button {
   opacity: 0.22;
   filter: brightness(0.38) saturate(0.5);
   transform: scale(0.97) translateY(14px);
-  transition: opacity 0.32s cubic-bezier(0.16, 1, 0.3, 1),
-              filter 0.32s cubic-bezier(0.16, 1, 0.3, 1),
-              transform 0.32s cubic-bezier(0.16, 1, 0.3, 1);
-  will-change: opacity, transform;
+  transition: opacity 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+              filter 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform, filter;
 }
 .retro-chapter:not(.illuminated) {
   opacity: 0.22;
@@ -989,7 +981,8 @@ button {
   border: 2px solid rgba(197, 160, 89, 0.35);
   box-shadow: none;
   z-index: 5;
-  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
+  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.45s ease, border-color 0.45s ease, box-shadow 0.45s ease;
+  will-change: transform, box-shadow;
 }
 .retro-pin-node::after {
   content: '';
@@ -1522,6 +1515,8 @@ button {
   border-radius: var(--radius-md);
   border: 1.5px solid rgba(197, 160, 89, 0.45);
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8), 0 0 35px rgba(197, 160, 89, 0.15);
+  transition: opacity 0.22s cubic-bezier(0.16, 1, 0.3, 1), transform 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
 }
 .lightbox-caption-bar {
   margin-top: 1.15rem;

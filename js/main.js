@@ -191,6 +191,46 @@
     }
   }
 
+  var currentBeamProgress = 0;
+  var targetBeamProgress = 0;
+  var isBeamAnimating = false;
+
+  function renderSmoothBeam() {
+    var reducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reducedMotion) {
+      currentBeamProgress = targetBeamProgress;
+      isBeamAnimating = false;
+    } else {
+      var diff = targetBeamProgress - currentBeamProgress;
+      if (Math.abs(diff) < 0.0003) {
+        currentBeamProgress = targetBeamProgress;
+        isBeamAnimating = false;
+      } else {
+        // Silky exponential damping (factor 0.22 creates an ultra-smooth glide eliminating wheel notch steps)
+        currentBeamProgress += diff * 0.22;
+        requestAnimationFrame(renderSmoothBeam);
+      }
+    }
+
+    if (progressBeam) {
+      progressBeam.style.height = (currentBeamProgress * 100) + '%';
+      progressBeam.classList.toggle('active', currentBeamProgress > 0.003);
+    }
+
+    var currentBeamPixelY = cachedTimelineTop + (currentBeamProgress * cachedTimelineHeight);
+    for (var i = 0; i < chapterData.length; i++) {
+      var item = chapterData[i];
+      if (!item.node) continue;
+      var nodeTop = cachedNodeTops[i] || 0;
+      var shouldIgnite = nodeTop <= currentBeamPixelY + 16;
+      if (item.isIgnited !== shouldIgnite) {
+        item.isIgnited = shouldIgnite;
+        item.node.classList.toggle('ignited', shouldIgnite);
+        item.chapter.classList.toggle('illuminated', shouldIgnite);
+      }
+    }
+  }
+
   function updateTimelineBeam() {
     if (!timelineEl || !progressBeam) return;
     if (cachedTimelineHeight <= 0) measureTimelineMetrics();
@@ -200,22 +240,11 @@
     var triggerY = scrollY + (windowH * 0.58);
 
     var progress = (triggerY - cachedTimelineTop) / cachedTimelineHeight;
-    var clamped = Math.max(0, Math.min(1, progress));
+    targetBeamProgress = Math.max(0, Math.min(1, progress));
 
-    progressBeam.style.height = (clamped * 100) + '%';
-    progressBeam.classList.toggle('active', clamped > 0.005);
-
-    // Pure arithmetic comparison against pre-calculated coordinates - ZERO DOM reflow!
-    for (var i = 0; i < chapterData.length; i++) {
-      var item = chapterData[i];
-      if (!item.node) continue;
-      var nodeTop = cachedNodeTops[i] || 0;
-      var shouldIgnite = nodeTop <= triggerY + 16;
-      if (item.isIgnited !== shouldIgnite) {
-        item.isIgnited = shouldIgnite;
-        item.node.classList.toggle('ignited', shouldIgnite);
-        item.chapter.classList.toggle('illuminated', shouldIgnite);
-      }
+    if (!isBeamAnimating) {
+      isBeamAnimating = true;
+      requestAnimationFrame(renderSmoothBeam);
     }
   }
 
@@ -342,8 +371,21 @@
     var item = items[index];
 
     if (lbImg) {
-      lbImg.src = item.src;
-      lbImg.alt = item.alt;
+      if (lightbox && lightbox.classList.contains('active')) {
+        lbImg.style.opacity = '0.35';
+        lbImg.style.transform = 'scale(0.985)';
+        setTimeout(function() {
+          lbImg.src = item.src;
+          lbImg.alt = item.alt;
+          lbImg.style.opacity = '1';
+          lbImg.style.transform = 'scale(1)';
+        }, 50);
+      } else {
+        lbImg.src = item.src;
+        lbImg.alt = item.alt;
+        lbImg.style.opacity = '1';
+        lbImg.style.transform = 'scale(1)';
+      }
     }
     if (lbCaption) {
       lbCaption.innerHTML = item.title + (item.badge ? ' <span style="opacity: 0.7; font-size: 0.85em; font-weight: normal;">(' + item.badge + ')</span>' : '');
@@ -578,11 +620,38 @@
     }
   });
 
+  function initSmoothAnchors() {
+    var navLinks = Array.prototype.slice.call(document.querySelectorAll('a[href^="#"]'));
+    navLinks.forEach(function(anchor) {
+      anchor.addEventListener('click', function(e) {
+        var href = this.getAttribute('href');
+        if (!href) return;
+        if (href === '#' || href === '#top') {
+          e.preventDefault();
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+          return;
+        }
+        var target = document.querySelector(href);
+        if (target) {
+          e.preventDefault();
+          var headerOffset = 80;
+          var elementPosition = target.getBoundingClientRect().top;
+          var offsetPosition = elementPosition + (window.scrollY || window.pageYOffset) - headerOffset;
+          window.scrollTo({
+            top: offsetPosition,
+            behavior: 'smooth'
+          });
+        }
+      });
+    });
+  }
+
   /* =========================================================================
      8. INITIALIZATION
      ========================================================================= */
   function init() {
     initScrollReveals();
+    initSmoothAnchors();
     measureTimelineMetrics();
     updateProgress();
     updateTimelineBeam();
