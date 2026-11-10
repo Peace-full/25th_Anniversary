@@ -150,6 +150,26 @@
   window.addEventListener('scroll', startAudioOnGesture, { passive: true });
   window.addEventListener('keydown', startAudioOnGesture, { passive: true });
 
+  // Opening Invitation Curtain & Audio Unlock
+  var curtain = document.getElementById('tributeCurtain');
+  var btnEnter = document.getElementById('btnEnterTribute');
+
+  if (btnEnter && curtain) {
+    btnEnter.addEventListener('click', function(e) {
+      // 1. Immediately attempt to unlock the audio track using this click gesture
+      startAudioOnGesture(e);
+      
+      // 2. Trigger the CSS slide animation
+      curtain.classList.add('opened');
+      
+      // 3. Remove the curtain from the DOM completely after the 1.2s animation finishes 
+      // so it doesn't block clicks or slow down scrolling
+      setTimeout(function() {
+        curtain.style.display = 'none';
+      }, 1250);
+    });
+  }
+
   // pause music when stiwch tab
   var wasPlayingBeforeHide = false;
   

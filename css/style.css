@@ -1644,3 +1644,115 @@ button {
     transform: none !important;
   }
 }
+
+/* ==========================================================================
+   Opening Tribute Curtain Animation (Perfect Split Effect)
+   ========================================================================== */
+.tribute-curtain {
+  position: fixed;
+  inset: 0;
+  z-index: 999999;
+  pointer-events: auto;
+}
+.tribute-curtain.opened {
+  pointer-events: none;
+}
+
+/* The invisible button covering the screen */
+.curtain-click-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  outline: none;
+}
+
+/* The dark split panels */
+.curtain-panel {
+  position: absolute;
+  top: 0;
+  width: 50%;
+  height: 100%;
+  background: var(--bg-dark); 
+  overflow: hidden; /* This hides the other half of the text! */
+  transition: transform 1.2s cubic-bezier(0.77, 0, 0.175, 1);
+  z-index: 1;
+}
+.left-panel { 
+  left: 0; 
+}
+.right-panel { 
+  right: 0; 
+}
+
+/* The Open State Triggers */
+.tribute-curtain.opened .left-panel { transform: translateX(-100%); }
+.tribute-curtain.opened .right-panel { transform: translateX(100%); }
+
+/* The Split Text Container */
+.curtain-split-content {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 200%; /* Spans the full screen width */
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2.5rem;
+  text-align: center;
+}
+
+/* Shifts the content inside the right panel backward so it matches the left side */
+.curtain-split-content.right-align-fix {
+  left: -100%; 
+}
+
+/* Typography Details */
+.curtain-emblem { color: var(--gold-light); }
+.curtain-title {
+  font-family: var(--serif);
+  font-size: clamp(3.2rem, 8vw, 6rem);
+  font-weight: 800;
+  margin-top: 0.5rem;
+  line-height: 1.1;
+  text-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+.curtain-subtitle {
+  font-family: var(--sans);
+  font-size: 0.95rem;
+  font-weight: 800;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--text-light-muted);
+  margin-top: 0.5rem;
+}
+
+/* High-impact golden entry button (Split into two visual halves) */
+.btn-enter-curtain {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem 3rem;
+  border-radius: var(--radius-pill);
+  background: linear-gradient(135deg, var(--gold), #A68020);
+  color: #120F0D;
+  font-family: var(--sans);
+  font-size: 0.85rem;
+  font-weight: 800;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  box-shadow: 0 8px 24px rgba(197, 160, 89, 0.25);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease, background 0.3s ease;
+}
+
+/* When hovering anywhere on the screen, animate BOTH halves of the button perfectly */
+.curtain-click-layer:hover ~ .curtain-panel .btn-enter-curtain {
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 16px 36px rgba(197, 160, 89, 0.4);
+  background: linear-gradient(135deg, #FFDE7A, var(--gold));
+}
