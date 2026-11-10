@@ -1,0 +1,34 @@
+PUT YOUR MUSIC HERE 🎵
+======================
+
+This folder is where the background music files live.
+
+1. Drop your songs here. Supported: .mp3, .ogg, .wav, .m4a
+
+2. Open main.js and add each file to the PLAYLIST list at the top:
+
+     const PLAYLIST = [
+       "music/Your Song 1.mp3",
+       "music/Your Song 2.mp3",
+     ];
+
+   One file per line, exact filename (spaces are fine).
+
+3. The page auto-plays the first song after the visitor taps the
+   music disc / anywhere on the page, and loops through the list.
+
+   NOTE: songs with long intros might not autoplay perfectly on phones
+   (mobile browsers block sound until the user taps -that's expected).
+
+LEGAL NOTE ⚠️
+Don't redistribute copyrighted songs (from Spotify, YouTube, etc.) with
+the page. Use music you own, royalty-free tracks, or something you
+composed. Popular sources for free songs: YouTube Audio Library,
+Pixabay Music, Free Music Archive (check each track's license).
+
+INCLUDED MEDIA 📝
+The music1.mp3 file shipped with this page is royalty-free:
+"Electric Guitar Love Emotional Type Trap Beat (prod by onesevenbeatxs)"
+by onesevenbeatxs -Pixabay Music -Pixabay Content License
+(https://pixabay.com/service/license-summary/).
+See THIRD_PARTY_NOTICES.md for the full credits table.
