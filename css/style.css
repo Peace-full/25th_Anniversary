@@ -1709,15 +1709,21 @@ button {
 /* The Split Text Container */
 .curtain-split-content {
   position: absolute;
-  top: 50%;
+  top: 0;
   left: 0;
   width: 200%; /* Spans the full screen width */
-  transform: translateY(-50%);
+  height: 100vh; /* Covers the full screen height */
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 2.5rem;
+  justify-content: space-between; /* Pushes the text up and button down */
+  
+  /* Use these two numbers to dial in the exact position on the invitation */
+  padding-top: 15vh; 
+  padding-bottom: 13vh; 
+  
   text-align: center;
+  z-index: 2;
 }
 
 /* Shifts the content inside the right panel backward so it matches the left side */
@@ -1729,14 +1735,14 @@ button {
 .curtain-emblem { color: var(--gold-light); }
 .curtain-title {
   font-family: var(--serif);
-  font-size: clamp(3.2rem, 8vw, 6rem);
+  font-size: clamp(2.5rem, 6vw, 4.5rem);
   font-weight: 800;
-  margin-top: 0.5rem;
-  line-height: 1.1;
-     
-  text-shadow: 
-    0 0 4px rgba(197, 160, 89, 0.8),
-    0 0 12px rgba(197, 160, 89, 0.4); 
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  /* A deep warm tone to match the printed ink on the card */
+  color: #5A2A3B; 
+  /* A soft white halo so it remains readable against the paper pattern */
+  text-shadow: 0 0 15px rgba(255, 255, 255, 0.8), 0 0 30px rgba(255, 255, 255, 0.9);
 }
 .curtain-subtitle {
   font-family: var(--sans);
@@ -1753,37 +1759,68 @@ button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 1rem 3rem;
-  border-radius: var(--radius-pill);
-  background: linear-gradient(135deg, var(--gold), #A68020);
-  color: #120F0D;
+  padding: 0.55rem 3rem;
+  border-radius: 6px; /* Slightly squarer edges to match the printed box */
+  
+  /* Deep burgundy color pulled directly from the invitation */
+  background: #612335; 
+  color: #F3ECE2; /* Vintage paper cream text */
+  border: 1px solid rgba(197, 160, 89, 0.5); /* Subtle gold trim */
+  
   font-family: var(--sans);
   font-size: 0.85rem;
   font-weight: 800;
   letter-spacing: 0.15em;
   text-transform: uppercase;
-  box-shadow: 0 8px 24px rgba(197, 160, 89, 0.25);
+  box-shadow: 0 8px 24px rgba(97, 35, 53, 0.35);
   transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease, background 0.3s ease;
 }
 
 /* When hovering anywhere on the screen, animate BOTH halves of the button perfectly */
 .curtain-click-layer:hover ~ .curtain-panel .btn-enter-curtain {
   transform: translateY(-3px) scale(1.02);
-  box-shadow: 0 16px 36px rgba(197, 160, 89, 0.4);
-  background: linear-gradient(135deg, #FFDE7A, var(--gold));
+  background: #7A2C42; /* Slightly lighter burgundy on hover */
+  box-shadow: 0 16px 36px rgba(97, 35, 53, 0.5);
 }
 
 /* Gentle breathing glow for the entrance button */
-@keyframes breathingGlow {
-  0%, 100% { box-shadow: 0 8px 24px rgba(197, 160, 89, 0.25); }
-  50% { box-shadow: 0 8px 45px rgba(197, 160, 89, 0.55); }
+@keyframes breathingGlowBurgundy {
+  0%, 100% { box-shadow: 0 8px 24px rgba(97, 35, 53, 0.3); }
+  50% { box-shadow: 0 8px 45px rgba(97, 35, 53, 0.6); }
 }
 
 .tribute-curtain .btn-enter-curtain {
-  animation: breathingGlow 3s ease-in-out infinite;
+  animation: breathingGlowBurgundy 5s ease-in-out infinite;
 }
 
 /* Pause the breathing when they actually hover over it */
 .curtain-click-layer:hover ~ .curtain-panel .btn-enter-curtain {
   animation: none; 
+}
+
+/* ==========================================================================
+   Curtain Background Image Split (Fixed)
+   ========================================================================== */
+.curtain-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw; 
+  max-width: 100vw !important; /* Overrides the global max-width bug */
+  height: 100vh;
+  object-fit: cover;
+  z-index: 0;
+  
+  /* Darkens the invitation so the golden text still pops */
+  
+}
+
+/* Shifts the image on the right panel backward by exactly half the screen */
+.curtain-bg.right-align-fix {
+  left: -50vw;
+}
+
+/* Ensure the text stays on top of the image */
+.curtain-split-content {
+  z-index: 2;
 }
