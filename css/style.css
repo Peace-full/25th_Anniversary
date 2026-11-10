@@ -1599,3 +1599,48 @@ button {
 }
 .lightbox-prev { left: clamp(1rem, 2vw, 2.5rem); }
 .lightbox-next { right: clamp(1rem, 2vw, 2.5rem); }
+
+/* ==========================================================================
+   Keepsake Print Optimization (Ctrl+P / Save to PDF)
+   ========================================================================== */
+@media print {
+  .hdr-wrapper,
+  .top-progress,
+  .ambient-lighting,
+  .timeline-progress-beam,
+  .toast-notice,
+  .lightbox-modal,
+  #headerMusicBtn,
+  #quickCelebrateBtn,
+  .btn-back-to-crest {
+    display: none !important;
+  }
+
+  body {
+    background: #FFFFFF !important;
+    color: #120F0D !important;
+  }
+
+  .sec.dark {
+    background: #FFFFFF !important;
+    color: #120F0D !important;
+  }
+
+  .title-editorial,
+  .days-mega-number,
+  .retro-era-title,
+  .stat-figure {
+    color: #8C6D2D !important;
+    text-shadow: none !important;
+  }
+
+  .retro-chapter,
+  .mosaic-photo-card,
+  .double-bezel {
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+    opacity: 1 !important;
+    filter: none !important;
+    transform: none !important;
+  }
+}

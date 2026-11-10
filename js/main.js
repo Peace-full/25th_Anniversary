@@ -130,10 +130,12 @@
     bgMusic.play().then(function() {
       isPlaying = true;
       updateAudioUI(true);
-    }).catch(function() {});
-    window.removeEventListener('click', startAudioOnGesture);
+      window.removeEventListener('click', startAudioOnGesture);
+    }).catch(function() {
+      // Autoplay policy not yet satisfied; keep listener primed for next user gesture
+    });
   }
-  window.addEventListener('click', startAudioOnGesture, { once: true });
+  window.addEventListener('click', startAudioOnGesture);
 
   /* =========================================================================
      3. ULTRA-FAST SCROLL PROGRESS & ZERO-LAG TIMELINE LIGHT BEAM
